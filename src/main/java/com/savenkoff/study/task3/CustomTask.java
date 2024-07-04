@@ -7,11 +7,11 @@ public class CustomTask implements Runnable {
     @Override
     public void run() {
         long sleepTime = (long) (Math.random()*10*1000);
-        System.out.println("Run task #" + taskNum + ", sleeping " + sleepTime/1000F + " seconds...");
+        System.out.println("Run task #" + taskNum + " in " + Thread.currentThread().getName() + ", sleeping " + sleepTime/1000F + " seconds...");
         try {
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+//            throw new RuntimeException(e);
         }
         System.out.println("End task #" + taskNum + "!");
     }

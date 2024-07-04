@@ -3,19 +3,25 @@ package com.savenkoff.study.task3;
 public class Starter {
     public static void main(String[] args) {
 
-        int taskCount = Long.valueOf(Math.round(Math.random()*100)).intValue();
+        int taskCount = Math.max(Long.valueOf(Math.round(Math.random()*100)).intValue(),1);
 
-        int taskFinallyNumb = Long.valueOf(Math.round(taskCount /3F)).intValue();
+        int taskFinallyNumb = Math.max(Long.valueOf(Math.round(taskCount /3F)).intValue(),1);
 
-        CustomThreadPool threadPool = new CustomThreadPool(4);
+        CustomThreadPool threadPool = new CustomThreadPool(4, 20);
 
         System.out.println("Tasks to run: " + taskCount + ". Final task # " + taskFinallyNumb);
 
-        for (int i = 0; i < taskCount; i++) {
+        for (int i = 1; i < (taskCount+1); i++) {
             threadPool.execute(new CustomTask(i));
-            // После трети отправленных на выполнение тасков останавливаем пул, для получения IllegalStateException
             if (i == taskFinallyNumb)
-                threadPool.shutdown();
+            {
+                //                threadPool.shutdown();
+                try {
+                    threadPool.awaitTermination();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 }
