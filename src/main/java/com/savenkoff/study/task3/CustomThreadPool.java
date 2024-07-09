@@ -7,8 +7,8 @@ import java.util.concurrent.*;
 public class CustomThreadPool {
     private final LinkedBlockingQueue<Runnable> blockingQueue;
     private final List<Thread> threadsList;
-    private boolean isShutdown;
-    private boolean isTerminate;
+    private volatile boolean isShutdown;
+    private volatile boolean isTerminate;
 
     /**
      * Create a new my {@code ThreadPoolExecutor} with the given initial
