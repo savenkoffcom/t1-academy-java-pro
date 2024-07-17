@@ -27,11 +27,31 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.3</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+
+        <!--            LoggerFactory is not a Logback LoggerContext but Logback is on the classpath. -->
+        <!--            Either remove Logback or the competing implementation -->
+        <!--            (class org.slf4j.helpers.NOPLoggerFactory loaded from file:/C:/Users/MyUsername/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar). -->
+        <!--            If you are using WebLogic you will need to add 'org.slf4j' to prefer-application-packages in WEB-INF/weblogic.xml: org.slf4j.helpers.NOPLoggerFactory-->
+
+        <!-- Из-за этого отключен spring-boot-starter-logging и отдельно подключен spring-boot-starter-log4j2 -->
+
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>6.1.10</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.3.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <version>3.3.1</version>
         </dependency>
     </dependencies>
 
