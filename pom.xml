@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>ProductService</module>
-        <module>PayerService</module>
+        <module>PayService</module>
     </modules>
 
     <properties>
@@ -56,18 +56,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
             <version>3.3.1</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-maven-plugin -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-maven-plugin</artifactId>
-            <version>10.16.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.3.230</version>
         </dependency>
     </dependencies>
 

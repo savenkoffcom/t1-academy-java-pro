@@ -1,0 +1,11 @@
+server:
+  servlet:
+    context-path: "/payer-app"
+  port: 8082
+
+integrations:
+  executors:
+    products-executor-service:
+      url: "http://localhost:8081/products-app"
+      connect-timeout: 1s
+      read-timeout: 30s
