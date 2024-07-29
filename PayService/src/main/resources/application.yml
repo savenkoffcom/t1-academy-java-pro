@@ -9,3 +9,7 @@ integrations:
       url: "http://localhost:8081/products-app"
       connect-timeout: 1s
       read-timeout: 30s
+
+application:
+  properties:
+    http-debug: false

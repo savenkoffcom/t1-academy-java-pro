@@ -1,5 +1,6 @@
 package com.savenkoff.study.task6.controllers;
 
+import com.savenkoff.study.task6.configurations.properties.ApplicationProperties;
 import com.savenkoff.study.task6.exceptions.EmptyObjectException;
 import jakarta.annotation.Nullable;
 import org.springframework.http.*;
@@ -9,17 +10,25 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.NoSuchElementException;
+import java.net.ConnectException;
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private final ApplicationProperties applicationProperties;
+
+    public CustomExceptionHandler(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
+    }
+
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         ProblemDetail problemDetail = (ProblemDetail) body;
         if (body == null)
             problemDetail = ProblemDetail.forStatusAndDetail(statusCode, ex.getMessage());
         problemDetail.setProperty("errorMessage",ex.getMessage());
-//        problemDetail.setProperty("errorStackTrace",ex.getStackTrace()); // TODO: Включать через application.yml
+        if (applicationProperties.isHttpDebug())
+            problemDetail.setProperty("errorStackTrace",ex.getStackTrace());
         return super.handleExceptionInternal(ex, problemDetail, headers, statusCode, request);
     }
 
@@ -44,5 +53,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleEmptyObjectException(EmptyObjectException e, WebRequest request) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,"Данные не найдены");
         return handleExceptionInternal(e,problemDetail,new HttpHeaders(),HttpStatus.NOT_FOUND,request);
+    }
+
+    @ExceptionHandler({ConnectException.class})
+    public ResponseEntity<Object> handleConnectException(ConnectException e, WebRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.METHOD_NOT_ALLOWED,"Ошибка соединения с внешним сервисом");
+        return handleExceptionInternal(e,problemDetail,new HttpHeaders(),HttpStatus.METHOD_NOT_ALLOWED,request);
     }
 }

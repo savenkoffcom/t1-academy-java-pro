@@ -1,18 +1,17 @@
 package com.savenkoff.study.task6.configurations.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.ConstructorBinding;
 
 @ConfigurationProperties("integrations.executors")
 public class ExecutorsProperties {
-    private final RestTemplateProperties productsExecutorService;
 
-    @ConstructorBinding
-    public ExecutorsProperties(RestTemplateProperties productsExecutorService) {
-        this.productsExecutorService = productsExecutorService;
+    private RestTemplateProperties restTemplateProperties;
+
+    public void setProductsExecutorService(RestTemplateProperties restTemplateProperties) {
+        this.restTemplateProperties = restTemplateProperties;
     }
 
     public RestTemplateProperties getProductsExecutorService() {
-        return productsExecutorService;
+        return restTemplateProperties;
     }
 }
