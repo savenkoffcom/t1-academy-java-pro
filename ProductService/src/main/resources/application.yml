@@ -1,0 +1,4 @@
+server:
+  servlet:
+    context-path: "/products-app"
+  port: 8081
