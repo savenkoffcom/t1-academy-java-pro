@@ -1,5 +1,6 @@
 package com.savenkoff.study.task6.servicies;
 
+import com.savenkoff.study.task6.dto.UserDTO;
 import com.savenkoff.study.task6.entities.User;
 import com.savenkoff.study.task6.repositories.UserDAO;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -105,5 +107,11 @@ public class UserService {
         } catch (SQLException e) {
             System.out.println("Не удалось очистить таблицу пользователей: " + e.getMessage());
         }
+    }
+
+    public List<UserDTO> getAllDTO() {
+        return this.getAll().stream()
+                .map(user -> new UserDTO(user.getId(), user.getUsername()))
+                .collect(Collectors.toList());
     }
 }

@@ -64,7 +64,7 @@ public class ProductService {
         try {
             return dao.getAll().stream()
                     .map(product -> new ProductDTO(
-                            product.getId(),product.getAccNum(),product.getBalance(),product.getTypeProduct(),product.getOwnerId().getId()
+                            product.getId(),product.getAccNum(),product.getBalance(),product.getTypeProduct(),product.getOwner().getId()
                     ))
                     .collect(Collectors.toList());
         } catch (SQLException e) {

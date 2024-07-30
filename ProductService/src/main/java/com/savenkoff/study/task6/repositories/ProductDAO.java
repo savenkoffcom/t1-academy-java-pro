@@ -2,7 +2,6 @@ package com.savenkoff.study.task6.repositories;
 
 import com.savenkoff.study.task6.entities.Product;
 import com.savenkoff.study.task6.entities.TypeProduct;
-import com.savenkoff.study.task6.servicies.ProductService;
 import com.savenkoff.study.task6.servicies.UserService;
 import org.springframework.stereotype.Repository;
 
@@ -30,7 +29,7 @@ public class ProductDAO {
         preparedStatement.setString(1, product.getAccNum());
         preparedStatement.setFloat(2, product.getBalance());
         preparedStatement.setString(3, product.getTypeProduct().name());
-        preparedStatement.setLong(4, product.getOwnerId().getId());
+        preparedStatement.setLong(4, product.getOwner().getId());
         preparedStatement.executeUpdate();
     }
 
@@ -83,7 +82,7 @@ public class ProductDAO {
         preparedStatement.setString(1, product.getAccNum());
         preparedStatement.setFloat(2, product.getBalance());
         preparedStatement.setString(3, product.getTypeProduct().name());
-        preparedStatement.setLong(4, product.getOwnerId().getId());
+        preparedStatement.setLong(4, product.getOwner().getId());
         preparedStatement.setLong(5, product.getId());
         preparedStatement.executeUpdate();
         return product;

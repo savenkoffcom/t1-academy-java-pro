@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -21,8 +20,6 @@ public class UsersController {
 
     @GetMapping("/")
     public List<UserDTO> getAllUsers() {
-        return userService.getAll().stream()
-                .map(user -> new UserDTO(user.getId(), user.getUsername()))
-                .collect(Collectors.toList());
+        return userService.getAllDTO();
     }
 }

@@ -5,25 +5,25 @@ public class Product {
     private String accNum;
     private Float balance;
     private TypeProduct typeProduct;
-    private User ownerId;
+    private User owner;
 
-    public Product(String accNum, Float balance, TypeProduct typeProduct, User ownerId) {
+    public Product(String accNum, Float balance, TypeProduct typeProduct, User owner) {
         this.accNum = accNum;
         this.balance = balance;
         this.typeProduct = typeProduct;
-        this.ownerId = ownerId;
+        this.owner = owner;
     }
 
-    public Product(Long id, String accNum, Float balance, TypeProduct typeProduct, User ownerId) {
+    public Product(Long id, String accNum, Float balance, TypeProduct typeProduct, User owner) {
         this.id = id;
         this.accNum = accNum;
         this.balance = balance;
         this.typeProduct = typeProduct;
-        this.ownerId = ownerId;
+        this.owner = owner;
     }
 
-    public User getOwnerId() {
-        return ownerId;
+    public User getOwner() {
+        return owner;
     }
 
     public String getAccNum() {
@@ -53,7 +53,7 @@ public class Product {
                 ", accNum='" + accNum + '\'' +
                 ", balance=" + balance +
                 ", typeProduct=" + typeProduct +
-                ", ownerId=" + ownerId +
+                ", owner=" + owner +
                 '}';
     }
 }
