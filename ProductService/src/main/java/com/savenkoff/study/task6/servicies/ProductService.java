@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,10 +22,8 @@ public class ProductService {
     private final ProductsRepository productsRepository;
 
     public Product getProductByIdAndUserId(Long productId, Long userId) {
-        Product product = productsRepository.getByIdAndOwnerId(productId, userId);
-        if (product == null)
-            throw new NoSuchElementException("Не найден договор с id = " + productId + " для пользователя с id =" + userId);
-        return product;
+        return Optional.ofNullable(productsRepository.getByIdAndOwnerId(productId, userId))
+                .orElseThrow(() -> new NoSuchElementException("Не найден договор с id = " + productId + " для пользователя с id =" + userId));
     }
 
     public ProductShortDTO getProductByIdAndUserIdDTO(Long productId, Long userId) {
@@ -33,10 +32,8 @@ public class ProductService {
     }
 
     public Product getById(Long id) {
-        Product product = productsRepository.getReferenceById(id);
-        if (product == null)
-            throw new NoSuchElementException("Не найден договор с id " + id);
-        return product;
+        return Optional.of(productsRepository.getReferenceById(id))
+                .orElseThrow(() -> new NoSuchElementException("Не найден договор с id " + id));
     }
 
     public ProductShortDTO getByIdDTO(Long id) {
