@@ -23,7 +23,7 @@ public class ProductService {
 
     public Product getProductByIdAndUserId(Long productId, Long userId) {
         return Optional.ofNullable(productsRepository.getByIdAndOwnerId(productId, userId))
-                .orElseThrow(() -> new NoSuchElementException("Не найден договор с id = " + productId + " для пользователя с id =" + userId));
+                .orElseThrow(() -> new NoSuchElementException("Не найден договор с id = %d для пользователя с id = %d".formatted(productId, userId)));
     }
 
     public ProductShortDTO getProductByIdAndUserIdDTO(Long productId, Long userId) {
@@ -33,7 +33,7 @@ public class ProductService {
 
     public Product getById(Long id) {
         return Optional.of(productsRepository.getReferenceById(id))
-                .orElseThrow(() -> new NoSuchElementException("Не найден договор с id " + id));
+                .orElseThrow(() -> new NoSuchElementException("Не найден договор с id %d".formatted(id)));
     }
 
     public ProductShortDTO getByIdDTO(Long id) {
@@ -58,10 +58,10 @@ public class ProductService {
         Float currentBalance = product.getBalance();
         // Ok, закладываем ту же логику, что рекомендовали
         if (Objects.isNull(currentBalance) || currentBalance.compareTo(request.amount()) < 0)
-            throw new IllegalArgumentException("На счете " + product.getAccNum() + " не достаточно средств для совершения платежа. Текущий баланс: " + currentBalance);
+            throw new IllegalArgumentException("На счете %s не достаточно средств для совершения платежа. Текущий баланс: %f".formatted( product.getAccNum(), currentBalance));
         currentBalance -= request.amount();
         product.setBalance(currentBalance);
         this.update(product);
-        return new ResponsePaymentDTO(0,"Payment successfully, balance " + currentBalance);
+        return new ResponsePaymentDTO(0,"Payment successfully, balance %f".formatted(currentBalance));
     }
 }
