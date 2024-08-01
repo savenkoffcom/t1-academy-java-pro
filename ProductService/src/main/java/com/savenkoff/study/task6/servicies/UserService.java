@@ -1,117 +1,55 @@
 package com.savenkoff.study.task6.servicies;
 
+import com.savenkoff.study.task6.dto.ProductShortDTO;
 import com.savenkoff.study.task6.dto.UserDTO;
+import com.savenkoff.study.task6.dto.UserProductsDTO;
 import com.savenkoff.study.task6.entities.User;
-import com.savenkoff.study.task6.repositories.UserDAO;
+import com.savenkoff.study.task6.entities.projections.UserProductsProjection;
+import com.savenkoff.study.task6.repositories.UsersRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.sql.SQLException;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private final UserDAO dao;
 
-    public UserService(UserDAO dao) {
-        this.dao = dao;
-    }
+    private final UsersRepository usersRepository;
 
-    public void clear() {
-        try {
-            dao.truncate();
-        } catch (SQLException e) {
-            System.out.println("Не удалось создать очистить таблицу пользователей: " + e.getMessage());
-        }
-    }
+    private final ProductService productService;
 
-    public void create(User user) {
-        try {
-            dao.create(user);
-        } catch (SQLException e) {
-            System.out.println("Не удалось создать пользователя " + user + ": " + e.getMessage());
-        }
-    }
-
-    public void deleteById(Long id) {
-        try {
-            User user = new User(id);
-            dao.delete(user);
-        } catch (SQLException e) {
-            System.out.println("Не удалось удалить пользователя по ID " + id + ": " + e.getMessage());
-        }
-    }
-
-    public void deleteByUsername(String username) {
-        try {
-            User user = new User(username);
-            dao.delete(user);
-        } catch (SQLException e) {
-            System.out.println("Не удалось удалить пользователя по username " + username + ": " + e.getMessage());
-        }
-    }
-
-    public Optional<User> getById(Long id) {
-        try {
-            User user = new User(id);
-            return Optional.ofNullable(dao.get(user));
-        } catch (SQLException e) {
-            System.out.println("Не удалось получить пользователя по id " + id + ": " + e.getMessage());
-        }
-        return Optional.empty();
-    }
-
-    public Optional<User> getByUsername(String username) {
-        try {
-            User user = new User(username);
-            return Optional.ofNullable(dao.get(user));
-        } catch (SQLException e) {
-            System.out.println("Не удалось получить пользователя по username " + username + ": " + e.getMessage());
-        }
-        return Optional.empty();
-    }
-
-    public Optional<User> updateById(Long id, User user) {
-        try {
-            User findUserData = new User(id);
-            return Optional.ofNullable(dao.update(findUserData, user));
-        } catch (SQLException e) {
-            System.out.println("Не удалось обновить пользователя по id " + id + ": " + e.getMessage());
-        }
-        return Optional.empty();
-    }
-
-    public Optional<User> updateByUsername(String username, User user) {
-        try {
-            User findUserData = new User(username);
-            return Optional.ofNullable(dao.update(findUserData, user));
-        } catch (SQLException e) {
-            System.out.println("Не удалось обновить пользователя по username " + username + ": " + e.getMessage());
-        }
-        return Optional.empty();
+    public User getById(Long id) {
+        // usersRepository.getById(id); -- deprecated, use getReferenceById
+        return usersRepository.getReferenceById(id);
     }
 
     public List<User> getAll() {
-        try {
-            return dao.getAll();
-        } catch (SQLException e) {
-            System.out.println("Не удалось получить список всех пользователей: " + e.getMessage());
-        }
-        return new ArrayList<>();
-    }
-
-    public void clearAll() {
-        try {
-            dao.truncateCascade();
-        } catch (SQLException e) {
-            System.out.println("Не удалось очистить таблицу пользователей: " + e.getMessage());
-        }
+        return usersRepository.findAll();
     }
 
     public List<UserDTO> getAllDTO() {
         return this.getAll().stream()
                 .map(user -> new UserDTO(user.getId(), user.getUsername()))
                 .collect(Collectors.toList());
+    }
+
+    public UserProductsDTO getProductsByUserId(Long userId) {
+        UserProductsProjection userProductsProjection = usersRepository.findByIdWithInProducts(userId);
+        List<ProductShortDTO> userProductsDTO = userProductsProjection.getProducts().stream()
+                        .map(productsProjection ->
+                                new ProductShortDTO(
+                                        productsProjection.getAccNum(),
+                                        productsProjection.getBalance(),
+                                        productsProjection.getTypeProduct()
+                                )
+                        )
+                .toList();
+        return new UserProductsDTO(userProductsProjection.getUsername(), userProductsDTO);
+    }
+
+    public ProductShortDTO getProductByUserIdAndProductIdDTO(Long userId, Long productId) {
+        return productService.getProductByIdAndUserIdDTO(productId, userId);
     }
 }

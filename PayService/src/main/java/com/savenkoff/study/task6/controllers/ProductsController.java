@@ -24,7 +24,7 @@ public class ProductsController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<UserProductsDTO> getUserProducts(@PathVariable("userId") Long userId) {
         ResponseEntity<UserProductsDTO> response = productsExecutorService.getRestTemplateForProducts().getForEntity(
-                executorsProperties.getProductsExecutorService().getUrl() + "/api/v1/products/user/" + userId,
+                executorsProperties.getProductsExecutorService().getUrl() + "/api/v1/users/"+ userId + "/products",
                 UserProductsDTO.class
                 );
         return response;
