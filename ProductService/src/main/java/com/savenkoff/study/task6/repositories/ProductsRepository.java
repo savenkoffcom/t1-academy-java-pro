@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductsRepository extends JpaRepository<Product, Long> {
@@ -16,8 +17,8 @@ public interface ProductsRepository extends JpaRepository<Product, Long> {
     @Query("select p from Product p")
     List<Product> findAllWithUser();
 
-    Product getByIdAndOwner(Long id, User owner);
+    Optional<Product> getByIdAndOwner(Long id, User owner);
 
     @Query(value = "select p.* from products p join users u on p.user_id = u.id where p.id = :id and p.user_id = :ownerId", nativeQuery = true)
-    Product getByIdAndOwnerId(Long id, Long ownerId);
+    Optional<Product> getByIdAndOwnerId(Long id, Long ownerId);
 }

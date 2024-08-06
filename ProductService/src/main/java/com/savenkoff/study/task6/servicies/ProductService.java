@@ -22,7 +22,7 @@ public class ProductService {
     private final ProductsRepository productsRepository;
 
     public Product getProductByIdAndUserId(Long productId, Long userId) {
-        return Optional.ofNullable(productsRepository.getByIdAndOwnerId(productId, userId))
+        return productsRepository.getByIdAndOwnerId(productId, userId)
                 .orElseThrow(() -> new NoSuchElementException("Не найден договор с id = %d для пользователя с id = %d".formatted(productId, userId)));
     }
 
